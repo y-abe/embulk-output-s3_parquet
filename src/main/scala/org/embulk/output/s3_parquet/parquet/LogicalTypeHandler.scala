@@ -133,6 +133,33 @@ object TimestampNanosLogicalTypeHandler extends LogicalTypeHandler {
   }
 }
 
+object DecimalLogicalTypeHandler extends LogicalTypeHandler {
+
+  override def isConvertible(t: EmbulkType): Boolean = {
+    t == EmbulkTypes.STRING
+  }
+
+  override def newSchemaFieldType(name: String): PrimitiveType = {
+    // TODO: change primitive type according to precision
+    Types
+      .optional(PrimitiveTypeName.BINARY)
+      .as(LogicalTypeAnnotation.decimalType(0, 10))
+      .named(name)
+  }
+
+  override def consume(orig: Any, recordConsumer: RecordConsumer): Unit = {
+    orig match {
+      case str: String =>
+        // TODO: use different add methods according to precision
+        recordConsumer.addBinary(Binary.fromString(str))
+      case _ =>
+        throw new DataException(
+          "given mismatched type value; expected type is aaaa"
+        )
+    }
+  }
+}
+
 object Int8LogicalTypeHandler
     extends IntLogicalTypeHandler(LogicalTypeAnnotation.intType(8, true))
 

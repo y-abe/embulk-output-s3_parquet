@@ -60,7 +60,8 @@ object LogicalTypeHandlerStore {
     "uint16" -> Uint16LogicalTypeHandler,
     "uint32" -> Uint32LogicalTypeHandler,
     "uint64" -> Uint64LogicalTypeHandler,
-    "json" -> JsonLogicalTypeHandler
+    "json" -> JsonLogicalTypeHandler,
+    "decimal" -> DecimalLogicalTypeHandler
   )
 
   def empty: LogicalTypeHandlerStore = {

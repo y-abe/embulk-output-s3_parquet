@@ -222,6 +222,7 @@ class CatalogRegistrator(
             " Please use `catalog.column_options` to define the type."
         )
       case "json" => "string"
+      case "decimal" => "string" // TODO: change later
       case _ =>
         throw new ConfigException(
           s"Unsupported a parquet logical type: $t. Please use `catalog.column_options` to define the type."

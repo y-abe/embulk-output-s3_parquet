@@ -102,9 +102,15 @@ private[parquet] case class ParquetFileWriter(
 
       override def stringColumn(column: Column): Unit = {
         nullOr(column, {
-          withWriteFieldContext(column, {
-            val bin = Binary.fromString(record.getString(column))
-            recordConsumer.addBinary(bin)
+          withWriteFieldContext(
+            column, {
+              logicalTypeHandlers.get(column.getName, column.getType) match {
+                case Some(h) =>
+                  h.consume(record.getString(column), recordConsumer)
+                case _ =>
+                  val bin = Binary.fromString(record.getString(column))
+                  recordConsumer.addBinary(bin)
+              }
           })
         })
       }
